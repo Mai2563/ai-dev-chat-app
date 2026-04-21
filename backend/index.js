@@ -5,7 +5,8 @@ const { Server } = require("socket.io");
 
 // ─── Step 1: Create Express app ───────────────────────────────────────────────
 const app = express();
-app.use(express.static(__dirname));
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../frontend")));
 
 // Optional: a simple HTTP route so you can verify the server is up
 // app.get("/", (req, res) => {
