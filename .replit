@@ -9,4 +9,9 @@ packages = ["nodejs-18_x", "psmisc"]
 
 [deployment]
 deploymentTarget = "cloudrun"
+run = ["sh", "-c", "node backend/index.js"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
 
