@@ -38,7 +38,14 @@ io.on("connection", (socket) => {
   socket.on("send_message", async (data) => {
     console.log("📩 User:", data);
     
-    io.emit("receive_message", data);
+    // ✅ สร้าง message ใหม่ให้ครบ
+    const userMsg = {
+      user: data.user,
+      message: data.message,
+      senderId: data.senderId, // ⭐ สำคัญ
+    };
+
+    io.emit("receive_message", userMsg);
 
     try {
       console.log("🤖 Calling AI...");
@@ -58,16 +65,22 @@ io.on("connection", (socket) => {
       io.emit("receive_message", {
         user: "AI",
         message: reply,
+        senderId: "AI", // ⭐ กันซ้ำ
       });
+
+      io.emit("receive_message", aiMsg);
 
     } catch (err) {
       console.error("❌ AI ERROR:", err.message);
 
       // ✅ fallback
-      io.emit("receive_message", {
+      const fallbackMsg = {
         user: "AI",
         message: "ตอนนี้ AI ยังไม่พร้อมใช้งาน (demo mode) 😅",
-      });
+        senderId: "AI",
+      };
+
+      io.emit("receive_message", fallbackMsg);
     }
   });
 
