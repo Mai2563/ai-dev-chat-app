@@ -44,7 +44,7 @@ io.on("connection", (socket) => {
       console.log("🤖 Calling AI...");
       
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: "You are a helpful chat assistant." },
           { role: "user", content: data.message },
@@ -62,6 +62,12 @@ io.on("connection", (socket) => {
 
     } catch (err) {
       console.error("❌ AI ERROR:", err.message);
+
+      // ✅ fallback
+      io.emit("receive_message", {
+        user: "AI",
+        message: "ตอนนี้ AI ยังไม่พร้อมใช้งาน (demo mode) 😅",
+      });
     }
   });
 
