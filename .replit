@@ -1,4 +1,4 @@
-run = "node backend/server.js"
+run = "node backend/index.js"
 modules = ["nodejs-20"]
 
 [agent]
