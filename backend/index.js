@@ -2,6 +2,12 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
+const OpenAI = require("openai");
+console.log(process.env.OPENAI_API_KEY);
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 
 // ─── Step 1: Create Express app ───────────────────────────────────────────────
 const app = express();
@@ -29,9 +35,34 @@ io.on("connection", (socket) => {
   // Fires each time a new client connects
   console.log(`✅ User connected    — socket id: ${socket.id}`);
 
-  socket.on("send_message", (data) => {
-    console.log("Message:", data);
+  socket.on("send_message", async (data) => {
+    console.log("📩 User:", data);
+    
     io.emit("receive_message", data);
+
+    try {
+      console.log("🤖 Calling AI...");
+      
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4.1-mini",
+        messages: [
+          { role: "system", content: "You are a helpful chat assistant." },
+          { role: "user", content: data.message },
+        ],
+      });
+
+      console.log("✅ AI responded");
+      
+      const reply = completion.choices[0].message.content;
+
+      io.emit("receive_message", {
+        user: "AI",
+        message: reply,
+      });
+
+    } catch (err) {
+      console.error("❌ AI ERROR:", err.message);
+    }
   });
 
   // Fires when this specific client disconnects

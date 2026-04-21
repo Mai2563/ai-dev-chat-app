@@ -1,10 +1,19 @@
+console.log("🔥 app.js loaded");
+document.addEventListener("DOMContentLoaded", () => {
+
+console.log("🔥 DOM READY");
+  
   const socket = io();
 
   socket.on("connect", () => {
     console.log("CONNECTED:", socket.id);
   });
 
+  document.getElementById("sendBtn").addEventListener("click", sendMessage);
+
   function sendMessage() {
+    console.log("🚀 CLICK SEND");
+    
     const username = document.getElementById("username").value.trim();
     const input = document.getElementById("message");
     const message = input.value.trim();
@@ -24,3 +33,5 @@
     li.innerText = data.user + ": " + data.message;
     document.getElementById("messages").appendChild(li);
   });
+
+});
