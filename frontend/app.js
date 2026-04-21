@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 console.log("🔥 DOM READY");
   
-  const socket = io();
+  const socket = io(window.location.origin);
 
   socket.on("connect", () => {
     console.log("CONNECTED:", socket.id);
