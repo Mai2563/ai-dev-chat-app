@@ -37,19 +37,21 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", async (data) => {
     console.log("📩 User:", data);
-    
-    // ✅ สร้าง message ใหม่ให้ครบ
+
+    // ✅ user message
     const userMsg = {
       user: data.user,
       message: data.message,
-      senderId: data.senderId, // ⭐ สำคัญ
+      senderId: data.senderId,
     };
 
     io.emit("receive_message", userMsg);
 
+    let aiReplied = false;
+
     try {
       console.log("🤖 Calling AI...");
-      
+
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
@@ -58,22 +60,25 @@ io.on("connection", (socket) => {
         ],
       });
 
-      console.log("✅ AI responded");
-      
-      const reply = completion.choices[0].message.content;
+      const reply = completion?.choices?.[0]?.message?.content;
 
-      io.emit("receive_message", {
-        user: "AI",
-        message: reply,
-        senderId: "AI", // ⭐ กันซ้ำ
-      });
+      if (reply) {
+        const aiMsg = {
+          user: "AI",
+          message: reply,
+          senderId: "AI",
+        };
 
-      io.emit("receive_message", aiMsg);
+        io.emit("receive_message", aiMsg);
+        aiReplied = true;
+      }
 
     } catch (err) {
       console.error("❌ AI ERROR:", err.message);
+    }
 
-      // ✅ fallback
+    // ✅ ยิง fallback แค่ครั้งเดียว
+    if (!aiReplied) {
       const fallbackMsg = {
         user: "AI",
         message: "ตอนนี้ AI ยังไม่พร้อมใช้งาน (demo mode) 😅",
