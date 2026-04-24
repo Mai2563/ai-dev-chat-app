@@ -76,7 +76,7 @@ const completion = await openai.chat.completions.create({
 - ห้ามเอา API key ไปไว้ frontend
 
 ## 👨‍💻 Author
-### Nawaphat.S
+Nawaphat.S
 
 ## ⭐️ Support
 If you like this project, give it a ⭐ on GitHub
