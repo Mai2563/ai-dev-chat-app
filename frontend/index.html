@@ -4,7 +4,7 @@
     <title>Chat</title>
 
     <!-- ✅ สำคัญมากสำหรับมือถือ -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <style>
       * {
@@ -12,8 +12,10 @@
         font-family: Arial, sans-serif;
       }
 
-      body {
+      html, body {
+        height: 100%;
         margin: 0;
+        overflow: hidden; /* 🔥 กัน layout เด้ง */
         background: #f0f2f5;
       }
 
@@ -21,7 +23,10 @@
       .chat-container {
         max-width: 600px;
         margin: auto;
+
         height: 100vh;
+        height: 100dvh; /* 🔥 FIX iPhone */
+
         display: flex;
         flex-direction: column;
         background: white;
@@ -43,6 +48,8 @@
         overflow-y: auto;
         display: flex;
         flex-direction: column;
+
+        -webkit-overflow-scrolling: touch; /* 🔥 iPhone smooth */
       }
 
       .message {
@@ -66,13 +73,13 @@
         font-size: 14px;
       }
 
-      /* ขวา (ตัวเอง) */
+      /* ขวา */
       .user .bubble {
         background: #0084ff;
         color: white;
       }
 
-      /* ซ้าย (คนอื่น + AI) */
+      /* ซ้าย */
       .other .bubble {
         background: #e4e6eb;
         color: black;
@@ -87,21 +94,21 @@
       /* ─── Input ─── */
       .input-area {
         display: flex;
+        gap: 5px;
         padding: 8px;
         border-top: 1px solid #ddd;
-        gap: 5px;
         background: white;
 
-        /* ✅ กัน iPhone safe area */
-        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+        padding-bottom: calc(8px + env(safe-area-inset-bottom)); /* 🔥 */
       }
 
       .input-area input {
         flex: 1;
         padding: 10px;
-        font-size: 16px; /* ✅ กัน zoom iOS */
+        font-size: 16px; /* 🔥 กัน zoom iOS */
         border: 1px solid #ddd;
         border-radius: 8px;
+        min-width: 0; /* 🔥 สำคัญ: กัน input ดันปุ่ม */
       }
 
       .input-area button {
@@ -110,13 +117,13 @@
         color: white;
         border: none;
         border-radius: 8px;
+        margin-left: auto; /* 🔥 ดันปุ่มไปขวาสุด */
       }
 
-      /* ─── Mobile tweak ─── */
+      /* ─── Mobile ─── */
       @media (max-width: 600px) {
         .chat-container {
           max-width: 100%;
-          height: 100vh;
         }
 
         .bubble {
