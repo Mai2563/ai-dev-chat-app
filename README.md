@@ -1,5 +1,4 @@
 # 💬 AI Real-Time Chat App
-Live Demo 👉 [Demo](https://ai-dev-chat-app--mai2563.replit.app/)
 
 A real-time chat application built with Node.js, Express, Socket.IO, and OpenAI API
 Supports multi-user messaging, AI responses, and mobile-friendly UI.
